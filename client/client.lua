@@ -312,7 +312,6 @@ RegisterNetEvent('rsg-fishprep:client:fishprepMenu', function()
 
 end)
 
-
 ------------------------------------------------------------------------------------------------------
 -- do checkingredients stuff
 ------------------------------------------------------------------------------------------------------
@@ -380,7 +379,8 @@ RegisterNetEvent('rsg-fishprep:crafting', function(title, category, ingredients,
         return
     end
 
-    LocalPlayer.state:set("inv_busy", true, true)
+    -- LocalPlayer.state:set("inv_busy", true, true)
+
     -- FIRST PART
     local ped = PlayerPedId()
     local coords = GetEntityCoords(ped)
@@ -427,7 +427,7 @@ RegisterNetEvent('rsg-fishprep:crafting', function(title, category, ingredients,
             
             SetPedToRagdoll(PlayerPedId(), 1000, 1000, 0, 0, 0, 0)
 
-            LocalPlayer.state:set("inv_busy", true, false)
+            -- LocalPlayer.state:set("inv_busy", true, false)
 
             lib.notify({ title = 'Try again!', description = 'Have you never used a knife?', type = 'error' })
             return
@@ -459,11 +459,14 @@ RegisterNetEvent('rsg-fishprep:crafting', function(title, category, ingredients,
         -- FINISH PART
         TriggerServerEvent('rsg-fishprep:server:finishcrafting', ingredients, receive, giveamount)
 
+    	-- LocalPlayer.state:set("inv_busy", true, false)
+				
         FreezeEntityPosition(ped, false)
         ClearPedTasks(ped)
 
     end)
-    LocalPlayer.state:set("inv_busy", true, false)
+		
+    -- LocalPlayer.state:set("inv_busy", true, false)
 end)
 
 ---------------------------
