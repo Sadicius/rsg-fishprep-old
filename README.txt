@@ -23,7 +23,7 @@
 ------------------------------------------------------------------------------------------------------
 
 # Video
-https://www.youtube.com/watch?v=LOEsIY-aqQ0
+- https://www.youtube.com/watch?v=LOEsIY-aqQ0
 
 # Dependancies
 - rsg-core
@@ -38,12 +38,5 @@ https://www.youtube.com/watch?v=LOEsIY-aqQ0
 # Starting the resource
 - add the following to your server.cfg file : ensure rsg-fishprep
 
-
-# By
-https://github.com/Sadicius
-
 # Credits
-- original resouce created by : https://github.com/qbcore-redm-framework
-- convert and rework by : https://github.com/QRCore-RedM-Re
-- RexShack / RexShack#3041 
 - Sadicius / Sadicius#1150 / https://linktr.ee/sadicius
