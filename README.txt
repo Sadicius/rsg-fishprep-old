@@ -23,7 +23,7 @@
 ------------------------------------------------------------------------------------------------------
 
 # Video
-https://youtu.be/LOEsIY-aqQ0
+https://www.youtube.com/watch?v=LOEsIY-aqQ0
 
 # Dependancies
 - rsg-core
