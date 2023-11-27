@@ -245,10 +245,12 @@ for _, v in pairs(Config.FishCrafting) do
 
     local setheader = RSGCore.Shared.Items[tostring(v.receive)].label
     local itemimg = "nui://"..Config.Img..RSGCore.Shared.Items[tostring(v.receive)].image
+    local itemimg2
     --print(setheader, v.receive)
 
     for i, ingredient in pairs(v.ingredients) do
         local setheader2 = RSGCore.Shared.Items[tostring(ingredient.item)].label
+	itemimg2 = "nui://"..Config.Img..RSGCore.Shared.Items[tostring(ingredient.item)].image
         table.insert(IngredientsMetadata, { label = setheader2, value = ingredient.amount })
     end
 
@@ -257,6 +259,7 @@ for _, v in pairs(Config.FishCrafting) do
         icon = itemimg,
         event = 'rsg-fishprep:client:checkingredients',
         metadata = IngredientsMetadata,
+        image =  itemimg2,
         args = {
             title = setheader,
             category = v.category,
