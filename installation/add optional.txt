@@ -1,0 +1,117 @@
+
+add in rsg-fishvendor
+
+----------------------------------------------
+add in config.lua
+----------------------------------------------
+ -- add items in shop Config.FishVendorShop change your slots
+
+	[1] = { name = "fishbasin_ms",          price = 50,     amount = 100, info = {}, type = "item",     slot = 1, },
+    	[2] = { name = "fishbasin_xl",          price = 100,    amount = 100, info = {}, type = "item",     slot = 2, },
+    
+ -- add prices for fillets fish and storage item
+
+	Config.FishPrice = {
+    		Small = 0.10, --(math.random(10, 25)*0.01), -- price per small fish
+    		Medium = 0.35, --(math.random(25, 100)*0.01), -- price per medium fish
+    		Large = 0.50, --(math.random(0.50, 2.00)*0.01), -- price per large fish
+	}
+
+	Config.FishBasin= {
+    		MSPrice = math.random(10, 35),
+    		XLPrice = math.random(25, 75)
+	}
+
+----------------------------------------------
+add in client.lua
+----------------------------------------------
+
+ -- add new options sell rsg-fishvendor:client:menu
+
+	{ 	title = 'Fish fillets',
+                description = 'Sells fish fillets',
+                icon = 'fas fa-fish',
+                serverEvent = 'rsg-fishvendor:server:selleatfish',
+        },
+	{ 	title = 'Leftover storages',
+                description = 'Sell your leftover or fabricated storages',
+                icon = 'fas fa-shopping-basket',
+                serverEvent = 'rsg-fishvendor:server:sellstash',
+        },
+
+----------------------------------------------
+add in server.lua
+----------------------------------------------
+
+ -- sell meat fish fish
+
+RegisterServerEvent('rsg-fishvendor:server:selleatfish')
+AddEventHandler('rsg-fishvendor:server:selleatfish', function()
+    local src = source
+    local Player = RSGCore.Functions.GetPlayer(src)
+    local price = 0
+    local hasmediumfish = false
+    if Player.PlayerData.items ~= nil and next(Player.PlayerData.items) ~= nil then
+        for k, v in pairs(Player.PlayerData.items) do 
+            if Player.PlayerData.items[k] ~= nil then 
+                if Player.PlayerData.items[k].name == "fishmeat" then
+                    price = price + (Config.FisheatPrice.Poor * Player.PlayerData.items[k].amount)
+                    Player.Functions.RemoveItem("fishmeat", Player.PlayerData.items[k].amount, k)
+                    hasmediumfish = true
+                elseif Player.PlayerData.items[k].name == "smallfish" then
+                    price = price + (Config.FisheatPrice.Small * Player.PlayerData.items[k].amount)
+                    Player.Functions.RemoveItem("smallfish", Player.PlayerData.items[k].amount, k)
+                    hasmediumfish = true
+                elseif Player.PlayerData.items[k].name == "mediumfish" then
+                    price = price + (Config.FisheatPrice.Medium * Player.PlayerData.items[k].amount)
+                    Player.Functions.RemoveItem("mediumfish", Player.PlayerData.items[k].amount, k)
+                    hasmediumfish = true
+                elseif Player.PlayerData.items[k].name == "largefish" then 
+                    price = price + (Config.FisheatPrice.Large * Player.PlayerData.items[k].amount)
+                    Player.Functions.RemoveItem("largefish", Player.PlayerData.items[k].amount, k)
+                    hasmediumfish = true
+                end
+            end
+        end
+        if hasmediumfish == true then
+            Player.Functions.AddItem("cash", price, "fish-sold")
+            TriggerClientEvent('ox_lib:notify', source, {title = 'Sell for $ '..price, description = 'your sell to fish filet', type = 'success' })
+            hasmediumfish = false
+        else
+            TriggerClientEvent('ox_lib:notify', source, {title = 'Error', description = 'Dont have fish filets', type = 'error' })
+        end
+    end
+end)
+
+
+ -- sell stash fish fish
+
+ RegisterServerEvent('rsg-fishvendor:server:sellstash')
+ AddEventHandler('rsg-fishvendor:server:sellstash', function()
+     local src = source
+     local Player = RSGCore.Functions.GetPlayer(src)
+     local price = 0
+     local hasmediumfish = false
+     if Player.PlayerData.items ~= nil and next(Player.PlayerData.items) ~= nil then
+         for k, v in pairs(Player.PlayerData.items) do 
+             if Player.PlayerData.items[k] ~= nil then 
+                 if Player.PlayerData.items[k].name == "fishbasin_ms" then
+                     price = price + (Config.FishBasin.MSPrice * Player.PlayerData.items[k].amount)
+                     Player.Functions.RemoveItem("fishbasin_ms", Player.PlayerData.items[k].amount, k)
+                     hasmediumfish = true
+                 elseif Player.PlayerData.items[k].name == "fishbasin_xl" then
+                     price = price + (Config.FishBasin.XLPrice * Player.PlayerData.items[k].amount)
+                     Player.Functions.RemoveItem("fishbasin_xl", Player.PlayerData.items[k].amount, k)
+                     hasmediumfish = true
+                 end
+             end
+         end
+         if hasmediumfish then
+             Player.Functions.AddItem("cash", price, "fish-sold")
+             TriggerClientEvent('ox_lib:notify', source, {title = 'Sell for $ '..price, description = 'your sell to stash', type = 'success' })
+             hasmediumfish = false
+         else
+            TriggerClientEvent('ox_lib:notify', source, {title = 'Error', description = 'Dont have fish stash', type = 'error' })
+         end
+     end
+ end)
