@@ -34,44 +34,6 @@ end)
 ------------------------------------------------------------------------------------------------------
 -- crafting location
 ------------------------------------------------------------------------------------------------------
--- trigger promps
--- Citizen.CreateThread(function()
---     if v.showText then
---         while true do
---             for _, v in pairs(Config.FishPrepLocations) do
---                 local sleep = 0
---                 local ped = PlayerPedId()
---                 local pos = GetEntityCoords(ped)
---                 for _, v in pairs(Config.Utility) do
---                     if v.Big == 'p_group_fishstall01' or v.Medium  == 'p_barrelsalt01x' then
---                         local coords2 = vector3(pos.x, pos.y, pos.z)
---                         local coords3 = vector3(v.x, v.y, v.z)
---                         local dist = #(coords2 - coords3)
---                         if dist < 1.3 and not IsPedInAnyVehicle(PlayerPedId(), false) then
---                         --if GetDistanceBetweenCoords(pos.x, pos.y, pos.z, v.x, v.y, v.z, true) < 1.3 and not IsPedInAnyVehicle(PlayerPedId(), false) then
---                             lib.showTextUI('['..Config.MenuKeybind..'] - Pesca', {
---                                 position = "top-center",
---                                 icon = 'fa-solid fa-bars',
---                                 style = {
---                                     borderRadius = 0,
---                                     backgroundColor = '#82283E',
---                                     color = 'white'
---                                 }
---                             })
---                             if IsControlJustReleased(0, RSGCore.Shared.Keybinds[Config.MenuKeybind]) then
---                                 TriggerEvent('rsg-fishprep:client:openmenupropB', v.Medium)
---                                 TriggerEvent('rsg-fishprep:client:openmenupropC', v.Big)
---                             end
---                         else
---                             lib.hideTextUI()
---                         end
---                     end
---                 end
---                 Wait(sleep)
---             end
---         end
---     end
--- end)
 
 CreateThread(function()
     for _, v in pairs(Config.FishPrepLocations) do
@@ -139,7 +101,7 @@ RegisterNetEvent('rsg-fishprep:client:openmenu', function()
         title = 'Fish Menu',
         options = {
             {
-                title = 'Fish Prep',
+                title = 'Filet your fish',
                 description = 'spawn your Fish',
                 icon = 'fa-solid fa-eye',
                 event = 'rsg-fishprep:client:fishprepMenu',
@@ -157,7 +119,7 @@ RegisterNetEvent('rsg-fishprep:client:openmenupropB', function()
             title = 'Fish Menu',
             options = {
                 {
-                    title = 'Fish Prep',
+                    title = 'Filet your fish',
                     description = 'spawn your Fish',
                     icon = 'fa-solid fa-eye',
                     event = 'rsg-fishprep:client:fishprepMenu',
@@ -169,8 +131,6 @@ RegisterNetEvent('rsg-fishprep:client:openmenupropB', function()
                     description = 'open your Fish Basin',
                     icon = 'fa-solid fa-dollar-sign',
                     event = 'rsg-fishprep:Client:backpackB',
-                    --progress = { (ItemData.metadata[Items] % 100) / 100 * 100 },
-                    --ProgressColour = Player.Inventory.ProgressColour,
                     args = {},
                     arrow = true
                 },
@@ -187,7 +147,7 @@ RegisterNetEvent('rsg-fishprep:client:openmenupropC', function()
             title = 'Fish Menu',
             options = {
                 {
-                    title = 'Fish Prep',
+                    title = 'Filet your fish',
                     description = 'spawn your Fish',
                     icon = 'fa-solid fa-eye',
                     event = 'rsg-fishprep:client:fishprepMenu',
@@ -199,8 +159,6 @@ RegisterNetEvent('rsg-fishprep:client:openmenupropC', function()
                     description = 'open your Fish Basin',
                     icon = 'fa-solid fa-dollar-sign',
                     event = 'rsg-fishprep:Client:backpackC',
-                    --progress = { (PlayerData.metadata[Items] % 100) / 100 * 100 },
-                    --ProgressColour = Player.Inventory.ProgressColour,
                     
                     args = {},
                     arrow = true
@@ -333,7 +291,7 @@ end
 RegisterNetEvent('rsg-fishprep:client:fishprepMenu', function()
     local fishMenu = {
         id = 'fish_main_menu',
-        title = 'Menu de pescados',
+        title = 'Fish Menu',
         menu = 'fish_basin_menu',
         onBack = function() end,
         options = {}
@@ -342,7 +300,7 @@ RegisterNetEvent('rsg-fishprep:client:fishprepMenu', function()
     for category, MenuData in pairs(CategoryMenus) do
         table.insert(fishMenu.options, {
             title = category,
-            description = 'Explora las recetas de ' .. category,
+            description = 'Recipes ' .. category,
             icon = 'fa-solid fa-fish',
             event = 'rsg-fishprep:client:' .. category,
             arrow = true
@@ -418,7 +376,7 @@ RegisterNetEvent('rsg-fishprep:crafting', function(title, category, ingredients,
     local numberGenerator = math.random(1, 100)
     if numberGenerator <= 5 then
         TriggerServerEvent('rsg-fishprep:server:breakknife')
-        lib.notify({ title = "¡Se ha roto el knife!", description = "Ya estaba viejo, necesitas una nuevo", type = 'error' })
+        lib.notify({ title = "¡Break knife!", description = "It was already old, you need a new one", type = 'error' })
         return
     end
 
