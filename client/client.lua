@@ -273,7 +273,7 @@ for _, v in pairs(Config.FishCrafting) do
         })
     end
 	
-    local imageOfIngredient = ingredientsMetadata[1].image or {} or itemimg
+    local imageOfIngredient = ingredientsMetadata[1].image or itemimg
 
     local option = {
         title = setheader,
