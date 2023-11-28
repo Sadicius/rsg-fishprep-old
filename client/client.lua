@@ -241,25 +241,46 @@ local CategoryMenus = {}
 
 -- iterate through recipes and organize them by category
 for _, v in pairs(Config.FishCrafting) do
+    local category = v.category
+    local menuData = CategoryMenus[category]
+
+    if not menuData then
+        menuData = {
+            id = 'fishking_menu_' .. category,
+            title = category,
+            menu = 'fish_main_menu',
+            onBack = function() end,
+            options = {},
+        }
+        CategoryMenus[category] = menuData
+    end
+	
     local IngredientsMetadata = {}
 
     local setheader = RSGCore.Shared.Items[tostring(v.receive)].label
     local itemimg = "nui://"..Config.Img..RSGCore.Shared.Items[tostring(v.receive)].image
-    local itemimg2
     --print(setheader, v.receive)
 
-    for i, ingredient in pairs(v.ingredients) do
-        local setheader2 = RSGCore.Shared.Items[tostring(ingredient.item)].label
-	itemimg2 = "nui://"..Config.Img..RSGCore.Shared.Items[tostring(ingredient.item)].image
-        table.insert(IngredientsMetadata, { label = setheader2, value = ingredient.amount })
+    for _, v in ipairs(v.ingredients) do
+        local ingredientLabel = RSGCore.Shared.Items[tostring(v.item)].label
+        local ingredientAmount = v.amount
+        local ingredientImage = "nui://" .. Config.Img .. RSGCore.Shared.Items[tostring(v.item)].image
+
+        table.insert(ingredientsMetadata, {
+            label = ingredientLabel,
+            value = ingredientAmount,
+            image = ingredientImage,
+        })
     end
+	
+    local imageOfIngredient = ingredientsMetadata[1].image or {} or itemimg
 
     local option = {
         title = setheader,
         icon = itemimg,
         event = 'rsg-fishprep:client:checkingredients',
         metadata = IngredientsMetadata,
-        image =  itemimg2,
+        image =  imageOfIngredient,
         args = {
             title = setheader,
             category = v.category,
@@ -267,20 +288,9 @@ for _, v in pairs(Config.FishCrafting) do
             time = v.time,
             receive = v.receive,
             giveamount = v.giveamount
-        }
+        },
     }
-
-   if not CategoryMenus[v.category] then
-        CategoryMenus[v.category] = {
-            id = 'fishking_menu_' .. v.category,
-            title = v.category,
-            menu = 'fish_main_menu',
-            onBack = function() end,
-            options = { option }
-        }
-    else
-        table.insert(CategoryMenus[v.category].options, option)
-    end
+    table.insert(CategoryMenus[v.category].options, option)
 end
 
 for category, MenuData in pairs(CategoryMenus) do
